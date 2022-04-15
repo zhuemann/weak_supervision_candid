@@ -20,12 +20,10 @@ def create_dataloaders(config):
 
     print(dir_base)
 
-    dataframe_location = os.path.join(dir_base,
-                                      'Zach_Analysis/candid_data/pneumothorax_large_df.xlsx')  # pneumothorax_df chest_tube_df rib_fracture
 
     dataframe_location = os.path.join(dir_base,
                                       'Zach_Analysis/candid_data/pneumothorax_large_df.xlsx')
-    dataframe_location = os.path.join(data_path, 'pneumothorax_large_df.xlsx' )
+    #dataframe_location = os.path.join(data_path, 'pneumothorax_large_df.xlsx' )
 
     # gets the candid labels and saves it off to the location
     # df = get_candid_labels(dir_base=dir_base)

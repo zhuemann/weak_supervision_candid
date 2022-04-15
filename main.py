@@ -19,7 +19,6 @@ if __name__ == '__main__':
     else:
         directory_base = "/UserData/"
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
 
     config = {}
     config["seed"] = 1
