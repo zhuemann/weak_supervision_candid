@@ -1,0 +1,11 @@
+numpy
+torch
+torchvision
+tqdm
+sklearn
+pandas
+openpyxl
+pydicom
+
+albumentations
+segmentation-models-pytorch
