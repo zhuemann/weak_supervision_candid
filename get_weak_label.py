@@ -9,7 +9,7 @@ import os
 import matplotlib.pyplot as plt
 
 from create_dataloaders import create_dataloaders
-from labeling_func_prediction import average_labeling_prediction
+from labeling_func_prediction import average_labeling_prediction, labeling_func_prediction
 from utility import dice_coeff
 
 def get_weak_label(config = None):
@@ -78,6 +78,7 @@ def get_weak_label(config = None):
         output5 = model5(images)
         output5 = output_resize(torch.squeeze(output5, dim=1))
 
+        #these just put each output through a sigmoid and round it to gets its prediction of 1 or 0 for each pixel
         sigmoid = torch.sigmoid(output1)
         output1 = torch.round(sigmoid)
         sigmoid = torch.sigmoid(output2)
@@ -89,8 +90,13 @@ def get_weak_label(config = None):
         sigmoid = torch.sigmoid(output5)
         output5 = torch.round(sigmoid)
 
+        # does an average voting for each pixel
         avg_output = average_labeling_prediction(output1, output2, output3, output4, output5)
 
+        # not implemented but this is where we will do the combination of the models
+        ising_output = labeling_func_prediction(output1, output2, output3, output4, output5)
+
+        # calculates the accuracy metric for each model prediction and the average we found
         d1 = dice_coeff(torch.squeeze(output1), targets)
         d2 = dice_coeff(torch.squeeze(output2), targets)
         d3 = dice_coeff(torch.squeeze(output3), targets)
@@ -99,6 +105,7 @@ def get_weak_label(config = None):
         d_avg = dice_coeff(avg_output, targets)
         f, ax = plt.subplots(1, 8)
 
+        # plots all the outputs with the dice score as the title for each of the models, the average, the true label, and the input
         ax[0].imshow(output1[0].squeeze().cpu().detach().numpy(), cmap=plt.cm.bone)
         ax[0].set_title(str(d1.item())[0:6], size=10)
         ax[1].imshow(output2[0].squeeze().cpu().detach().numpy(), cmap=plt.cm.bone)
@@ -110,7 +117,7 @@ def get_weak_label(config = None):
         ax[4].imshow(output5[0].squeeze().cpu().detach().numpy(), cmap=plt.cm.bone)
         ax[4].set_title(str(d5.item())[0:6], size=10)
         ax[5].imshow(avg_output[0].squeeze().cpu().detach().numpy(), cmap=plt.cm.bone)
-        ax[5].set_title(str(d_avg.item())[0:6], size=10)
+        ax[5].set_title("simple_average: " + str(d_avg.item())[0:6], size=10)
         ax[6].imshow(targets.squeeze().cpu().detach().numpy(), cmap=plt.cm.bone)
         ax[6].set_title("target", size=10)
         ax[7].imshow(np.uint8(torch.permute(images[0], (1, 2, 0)).squeeze().cpu().detach().numpy()))
