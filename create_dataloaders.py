@@ -9,7 +9,7 @@ from dataloader_image import ImageDataset
 
 
 
-def create_dataloaders(config):
+def create_dataloaders(config, df_location = None):
     dir_base = config["dir_base"]
     seed = config["seed"]
     IMG_SIZE = config["IMG_SIZE"]
@@ -20,9 +20,10 @@ def create_dataloaders(config):
 
     print(dir_base)
 
-
-    dataframe_location = os.path.join(dir_base,
-                                      'Zach_Analysis/candid_data/pneumothorax_large_df.xlsx')
+    if df_location == None:
+        dataframe_location = os.path.join(dir_base,'Zach_Analysis/candid_data/pneumothorax_large_df.xlsx')
+    else:
+        dataframe_location = df_location
     #dataframe_location = os.path.join(data_path, 'pneumothorax_large_df.xlsx' )
 
     # gets the candid labels and saves it off to the location

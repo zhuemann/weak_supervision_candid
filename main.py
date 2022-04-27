@@ -5,6 +5,7 @@
 
 
 from segmentatin_training import segmentation_training
+from get_weak_label import get_weak_label
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
@@ -22,7 +23,7 @@ if __name__ == '__main__':
 
     config = {}
     config["seed"] = 1
-    config["batch_size"] = 8
+    config["batch_size"] = 1#8
     config["dir_base"] = directory_base
     config["epochs"] = 150
     config["n_classes"] = 2
@@ -33,4 +34,5 @@ if __name__ == '__main__':
     # should point to you external hard drive with data or wherever you move it
     config["data_path"] = "D:/candid_ptx/"
 
-    acc, valid_log = segmentation_training(config)
+    #acc, valid_log = segmentation_training(config)
+    get_weak_label(config=config)
