@@ -17,7 +17,7 @@ def train_with_psuedo_labels(config = None, weight1=None, weight2=None, weight3=
 
 
     IMG_SIZE = config["IMG_SIZE"]
-    BATCH_SIZE = 1
+    BATCH_SIZE = 4
     LR = 1e-5  # 8e-5
     N_EPOCHS = config["epochs"]
     N_CLASS = config["n_classes"]
@@ -76,7 +76,7 @@ def train_with_psuedo_labels(config = None, weight1=None, weight2=None, weight3=
     for _, data in tqdm(enumerate(training_loader, 0)):
         # gets the images and labels from the data loader
         targets = data['targets'].to(device, dtype=torch.float)
-        #targets = torch.squeeze(targets)
+        targets = torch.squeeze(targets)
         images = data['images'].to(device, dtype=torch.float)
 
         # goes through the model and resized
