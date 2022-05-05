@@ -7,6 +7,7 @@ import gc
 from tqdm import tqdm
 import os
 import matplotlib.pyplot as plt
+import pickle
 
 from create_dataloaders import create_dataloaders
 from labeling_func_prediction import average_labeling_prediction, labeling_func_prediction
@@ -24,41 +25,51 @@ def get_weak_label(config = None):
 
     # gets the dataloaders, you should have df_location be the path to the df which you want predictions for
     # you should change df_location to be the dataset with roughly 2500 images and should look something like
-    # os.path.join(dir_base,'Zach_Analysis/candid_data/pneumothorax_testset_df.xlsx')
-    training_loader, valid_loader, test_loader = create_dataloaders(config, df_location=None)
+    weak_datapath = os.path.join(dir_base,'Zach_Analysis/candid_data/weak_supervision/weak_supervision_trainset_df.xlsx')
+    training_loader, valid_loader, test_loader = create_dataloaders(config, df_location=weak_datapath)
 
     # gets the model which are random and loads in the trained weights to give us five labeling fucntions
     model1 = smp.Unet(encoder_name="resnet50", encoder_weights=None, in_channels=3, classes=1)
     model2 = smp.Unet(encoder_name="resnet50", encoder_weights=None, in_channels=3, classes=1)
     model3 = smp.Unet(encoder_name="resnet50", encoder_weights=None, in_channels=3, classes=1)
-    model4 = smp.Unet(encoder_name="resnet50", encoder_weights=None, in_channels=3, classes=1)
-    model5 = smp.Unet(encoder_name="resnet50", encoder_weights=None, in_channels=3, classes=1)
+    #model4 = smp.Unet(encoder_name="resnet50", encoder_weights=None, in_channels=3, classes=1)
+    #model5 = smp.Unet(encoder_name="resnet50", encoder_weights=None, in_channels=3, classes=1)
 
     # sets up the paths for each model to be loaded from this path should point to the folder with the models in it
-    model_base = os.path.join(dir_base,'Zach_Analysis/models/candid_finetuned_segmentation/weak_supervision_models/')
-    model1_path = model_base + "segmentation_candid98"
+    model_base = os.path.join(dir_base,'Zach_Analysis/models/candid_finetuned_segmentation/weak_supervision_models/roberta_labeling_functions/')
+    model1_path = model_base + "segmentation_candid42"
     model2_path = model_base + "segmentation_candid117"
     model3_path = model_base + "segmentation_candid295"
-    model4_path = model_base + "segmentation_candid456"
-    model5_path = model_base + "segmentation_candid712"
+    #model4_path = model_base + "segmentation_candid456"
+    #model5_path = model_base + "segmentation_candid712"
 
     # loads in the weights for each model give the path specified above
     model1.load_state_dict(torch.load(model1_path, map_location=torch.device('cpu')))
     model2.load_state_dict(torch.load(model2_path, map_location=torch.device('cpu')))
     model3.load_state_dict(torch.load(model3_path, map_location=torch.device('cpu')))
-    model4.load_state_dict(torch.load(model4_path, map_location=torch.device('cpu')))
-    model5.load_state_dict(torch.load(model5_path, map_location=torch.device('cpu')))
+    #model4.load_state_dict(torch.load(model4_path, map_location=torch.device('cpu')))
+    #model5.load_state_dict(torch.load(model5_path, map_location=torch.device('cpu')))
+
 
     # sends all the models to device
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model1.to(device)
     model2.to(device)
     model3.to(device)
-    model4.to(device)
-    model5.to(device)
+    #model4.to(device)
+    #model5.to(device)
 
     # for resizing the output from the model back down to our label size
     output_resize = transforms.Compose([transforms.Resize((IMG_SIZE, IMG_SIZE))])
+
+    #psudo1 = torch.empty((256,256, 1))
+    pred1 = []
+    pred2 = []
+    pred3 = []
+    #pred4 = []
+    #pred5 = []
+
+
 
     for _, data in tqdm(enumerate(test_loader, 0)):
         # gets the images and labels from the data loader
@@ -69,35 +80,58 @@ def get_weak_label(config = None):
         # goes through the model and resized
         output1 = model1(images)
         output1 = output_resize(torch.squeeze(output1, dim=1))
+
         output2 = model2(images)
         output2 = output_resize(torch.squeeze(output2, dim=1))
         output3 = model3(images)
         output3 = output_resize(torch.squeeze(output3, dim=1))
-        output4 = model4(images)
-        output4 = output_resize(torch.squeeze(output4, dim=1))
-        output5 = model5(images)
-        output5 = output_resize(torch.squeeze(output5, dim=1))
+        #output4 = model4(images)
+        #output4 = output_resize(torch.squeeze(output4, dim=1))
+        #output5 = model5(images)
+        #output5 = output_resize(torch.squeeze(output5, dim=1))
 
         #these just put each output through a sigmoid and round it to gets its prediction of 1 or 0 for each pixel
         sigmoid = torch.sigmoid(output1)
         output1 = torch.round(sigmoid)
+
         sigmoid = torch.sigmoid(output2)
         output2 = torch.round(sigmoid)
         sigmoid = torch.sigmoid(output3)
         output3 = torch.round(sigmoid)
-        sigmoid = torch.sigmoid(output4)
-        output4 = torch.round(sigmoid)
-        sigmoid = torch.sigmoid(output5)
-        output5 = torch.round(sigmoid)
+        #sigmoid = torch.sigmoid(output4)
+        #output4 = torch.round(sigmoid)
+        #sigmoid = torch.sigmoid(output5)
+        #output5 = torch.round(sigmoid)
 
+
+        #print(type(output1))
+        #test = output1.cpu().detach().numpy()
+        #listthing.append(test)
+
+        output1 = output1.cpu().detach().numpy()
+        pred1.append(output1)
+        output2 = output2.cpu().detach().numpy()
+        pred2.append(output2)
+        output3 = output3.cpu().detach().numpy()
+        pred3.append(output3)
+        #output4 = output4.cpu().detach().numpy()
+        #pred4.append(output4)
+        #output5 = output5.cpu().detach().numpy()
+        #pred5.append(output5)
+
+        '''
+        #psudo1 = torch.cat((psudo1, output1), dim=0)
+        #print(psudo1.size())
         # does an average voting for each pixel
         avg_output = average_labeling_prediction(output1, output2, output3, output4, output5)
 
         # not implemented but this is where we will do the combination of the models
-        ising_output = labeling_func_prediction(output1, output2, output3, output4, output5)
+        #ising_output = labeling_func_prediction(output1, output2, output3, output4, output5)
 
         # calculates the accuracy metric for each model prediction and the average we found
         d1 = dice_coeff(torch.squeeze(output1), targets)
+        #print(d1)
+        
         d2 = dice_coeff(torch.squeeze(output2), targets)
         d3 = dice_coeff(torch.squeeze(output3), targets)
         d4 = dice_coeff(torch.squeeze(output4), targets)
@@ -124,3 +158,20 @@ def get_weak_label(config = None):
 
 
         plt.show()
+        '''
+
+
+    return pred1, pred2, pred3
+
+    """
+    with open('pred1.pickle', 'wb') as handle:
+        pickle.dump(pred1, handle)
+    with open('pred2.pickle', 'wb') as handle:
+        pickle.dump(pred2, handle)
+    with open('pred3.pickle', 'wb') as handle:
+        pickle.dump(pred3, handle)
+    #with open('pred4.pickle', 'wb') as handle:
+    #    pickle.dump(pred4, handle)
+    #with open('pred5.pickle', 'wb') as handle:
+    #    pickle.dump(pred5, handle)
+    """

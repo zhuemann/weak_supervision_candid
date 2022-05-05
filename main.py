@@ -6,10 +6,11 @@
 
 from segmentatin_training import segmentation_training
 from get_weak_label import get_weak_label
+from labeling_func_prediction import labeling_func_prediction
+from train_with_psuedo import train_with_psuedo_labels
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-
 
 
     # Sets which directory to use point this to the folder with the candid data
@@ -28,11 +29,18 @@ if __name__ == '__main__':
     config["epochs"] = 150
     config["n_classes"] = 2
     config["LR"] = 1e-5
-    config["IMG_SIZE"] = 256
-    config["train_samples"] = 120
-    config["test_samples"] = 120
+    config["IMG_SIZE"] = 512
+    config["train_samples"] = .8
+    config["test_samples"] = .5
     # should point to you external hard drive with data or wherever you move it
     config["data_path"] = "D:/candid_ptx/"
 
+    pred1, pred2, pred3 = get_weak_label(config=config)
+    weight1, weight2, weight3 = labeling_func_prediction(pred1, pred2, pred3)
+    weight1 = 1/weight1
+    weight2 = 1/weight2
+    weight3 = 1/weight3
+    train_with_psuedo_labels(config, weight1, weight2, weight3)
+
     #acc, valid_log = segmentation_training(config)
-    get_weak_label(config=config)
+    #get_weak_label(config=config)
