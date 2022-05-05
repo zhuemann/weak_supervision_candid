@@ -108,6 +108,7 @@ def train_with_psuedo_labels(config = None, weight1=None, weight2=None, weight3=
 
         avg_output = average_labeling_prediction(output1, output2, output3)
         d_avg = dice_coeff(avg_output, targets)
+        d_avg.cpu().detach().numpy()
         dice_avg.append(d_avg)
 
 
