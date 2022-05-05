@@ -46,6 +46,9 @@ if __name__ == '__main__':
     weight3 = norm_factor*weight3
 
     train_with_psuedo_labels(config, weight1, weight2, weight3)
+    print(weight1)
+    print(weight2)
+    print(weight3)
 
     #acc, valid_log = segmentation_training(config)
     #get_weak_label(config=config)
