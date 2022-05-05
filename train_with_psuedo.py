@@ -100,6 +100,8 @@ def train_with_psuedo_labels(config = None, weight1=None, weight2=None, weight3=
 
         weak_label = get_psuedo_label(weight1, weight2, weight3, output1, output1, output1)
 
+        print(targets.shape())
+        print(weak_label.shape())
         d1 = dice_coeff(torch.squeeze(weak_label), targets)
 
         print(d1)
