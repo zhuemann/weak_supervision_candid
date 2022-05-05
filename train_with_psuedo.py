@@ -73,7 +73,7 @@ def train_with_psuedo_labels(config = None, weight1=None, weight2=None, weight3=
     dice_weight = []
     dice_avg = []
 
-    for _, data in tqdm(enumerate(valid_loader, 0)):
+    for _, data in tqdm(enumerate(test_loader, 0)):
         # gets the images and labels from the data loader
         targets = data['targets'].to(device, dtype=torch.float)
         targets = torch.squeeze(targets)
