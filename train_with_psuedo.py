@@ -112,5 +112,5 @@ def train_with_psuedo_labels(config = None, weight1=None, weight2=None, weight3=
         dice_avg.append(d_avg)
 
 
-    print(f"Weighting Scheme:  {np.mean(dice_weight)}")
+    #print(f"Weighting Scheme:  {np.mean(dice_weight)}")
     print(f"Averaging: {np.mean(dice_avg)}")
