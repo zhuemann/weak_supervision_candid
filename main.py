@@ -29,7 +29,7 @@ if __name__ == '__main__':
     config["epochs"] = 150
     config["n_classes"] = 2
     config["LR"] = 1e-5
-    config["IMG_SIZE"] = 256
+    config["IMG_SIZE"] = 512
     config["train_samples"] = .8
     config["test_samples"] = .5
     # should point to you external hard drive with data or wherever you move it
