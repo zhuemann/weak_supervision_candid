@@ -65,11 +65,11 @@ def labeling_func_prediction(pred1, pred2, pred3):
 
 
 
-def average_labeling_prediction(output1, output2, output3, output4, output5):
+def average_labeling_prediction(output1, output2, output3):
 
-    pooled_outputs = output1 + output2 +output3 + output4 + output5
+    pooled_outputs = output1 + output2 + output3
 
-    pooled_outputs = torch.round(pooled_outputs/5)
+    pooled_outputs = torch.round(pooled_outputs/3)
 
     return pooled_outputs
 
