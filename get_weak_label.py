@@ -36,7 +36,8 @@ def get_weak_label(config = None):
     #model5 = smp.Unet(encoder_name="resnet50", encoder_weights=None, in_channels=3, classes=1)
 
     # sets up the paths for each model to be loaded from this path should point to the folder with the models in it
-    model_base = os.path.join(dir_base,'Zach_Analysis/models/candid_finetuned_segmentation/weak_supervision_models/imagenet_labeling_functions/')
+    #model_base = os.path.join(dir_base,'Zach_Analysis/models/candid_finetuned_segmentation/weak_supervision_models/imagenet_labeling_functions/')
+    model_base = os.path.join(dir_base,'Zach_Analysis/models/candid_finetuned_segmentation/weak_supervision_models/roberta_labeling_functions/')
     model1_path = model_base + "segmentation_candid42"
     model2_path = model_base + "segmentation_candid117"
     model3_path = model_base + "segmentation_candid295"

@@ -40,7 +40,7 @@ if __name__ == '__main__':
     weight1 = 1/weight1
     weight2 = 1/weight2
     weight3 = 1/weight3
-    norm_factor = 1/(weight1 + weight2+ weight3)
+    norm_factor = 1/(weight1 + weight2 + weight3)
     weight1 = norm_factor*weight1
     weight2 = norm_factor*weight2
     weight3 = norm_factor*weight3
