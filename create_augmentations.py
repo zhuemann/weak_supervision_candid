@@ -2,7 +2,7 @@ import albumentations as albu
 import torchvision.transforms as transforms
 
 
-def create_augmentations(IMG_SIZE = 512):
+def create_augmentations(IMG_SIZE = 256):
 
     """
     # old augmentatins kept for comparison
