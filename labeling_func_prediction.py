@@ -80,5 +80,4 @@ def get_psuedo_label(weight1, weight2, weight3, mask1, mask2, mask3):
 
     label = torch.round(pooled_masks)
 
-    print(label)
     return label
