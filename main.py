@@ -36,7 +36,7 @@ if __name__ == '__main__':
     config["data_path"] = "D:/candid_ptx/"
 
     pred1, pred2, pred3 = get_weak_label(config=config)
-    weight1, weight2, weight3 = labeling_func_prediction(pred1, pred2, pred3)
+    weight1, weight2, weight3 = labeling_func_prediction(pred3, pred1, pred2)
     weight1 = 1/weight1
     weight2 = 1/weight2
     weight3 = 1/weight3
