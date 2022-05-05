@@ -73,7 +73,8 @@ def train_with_psuedo_labels(config = None, weight1=None, weight2=None, weight3=
 
     optimizer = torch.optim.Adam(params=final_model.parameters(), lr=LR)
 
-    dice = []
+    dice_weight = []
+    dice_avg = []
     for _, data in tqdm(enumerate(training_loader, 0)):
         # gets the images and labels from the data loader
         targets = data['targets'].to(device, dtype=torch.float)
@@ -103,7 +104,12 @@ def train_with_psuedo_labels(config = None, weight1=None, weight2=None, weight3=
 
         d1 = dice_coeff(torch.squeeze(weak_label), targets)
         d1 = d1.cpu().detach().numpy()
-        dice.append(d1)
+        dice_weight.append(d1)
 
-        print(d1)
-    print(np.mean(dice))
+        avg_output = average_labeling_prediction(output1, output2, output3)
+        d_avg = dice_coeff(avg_output, targets)
+        dice_avg.append(d_avg)
+
+
+    print(f"Weighting Scheme:  {np.mean(dice_weight)}")
+    print(f"Averaging: {np.mean(dice_avg)}")
