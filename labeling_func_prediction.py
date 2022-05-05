@@ -76,6 +76,9 @@ def average_labeling_prediction(output1, output2, output3, output4, output5):
 
 def get_psuedo_label(weight1, weight2, weight3, mask1, mask2, mask3):
 
-    sum_mask = weight1*mask1 + weight2*mask2 + weight3*mask3
+    pooled_masks = weight1*mask1 + weight2*mask2 + weight3*mask3
 
-    print(sum_mask)
+    label = torch.rand(pooled_masks)
+
+    print(label)
+    return label
