@@ -35,20 +35,17 @@ if __name__ == '__main__':
     # should point to you external hard drive with data or wherever you move it
     config["data_path"] = "D:/candid_ptx/"
 
-    #pred1, pred2, pred3 = get_weak_label(config=config)
-    #weight1, weight2, weight3 = labeling_func_prediction(pred1, pred2, pred3)
-    #weight1 = 1/weight1
-    #weight2 = 1/weight2
-    #weight3 = 1/weight3
-    #norm_factor = 1/(weight1 + weight2+ weight3)
-    #weight1 = norm_factor*weight1
-    #weight2 = norm_factor*weight2
-    #weight3 = norm_factor*weight3
+    pred1, pred2, pred3 = get_weak_label(config=config)
+    weight1, weight2, weight3 = labeling_func_prediction(pred1, pred2, pred3)
+    weight1 = 1/weight1
+    weight2 = 1/weight2
+    weight3 = 1/weight3
+    norm_factor = 1/(weight1 + weight2+ weight3)
+    weight1 = norm_factor*weight1
+    weight2 = norm_factor*weight2
+    weight3 = norm_factor*weight3
 
-    #print(weight1)
-    #print(weight2)
-    #print(weight3)
-    train_with_psuedo_labels(config, weight1=.3825, weight2=.4409, weight3=.1765)
+    train_with_psuedo_labels(config, weight1, weight2, weight3)
 
     #acc, valid_log = segmentation_training(config)
     #get_weak_label(config=config)
