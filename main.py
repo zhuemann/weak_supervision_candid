@@ -14,7 +14,7 @@ if __name__ == '__main__':
 
 
     # Sets which directory to use point this to the folder with the candid data
-    local = True
+    local = False
     if local == True:
         directory_base = "Z:/"
         # directory_base = "/home/zmh001/r-fcb-isilon/research/Bradshaw/"
